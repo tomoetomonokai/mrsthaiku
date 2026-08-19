@@ -1,0 +1,28 @@
+name: Sync approved haiku
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/15 * * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch approved haiku
+        env:
+          GAS_EXPORT_URL: ${{ secrets.GAS_EXPORT_URL }}
+        run: |
+          curl --fail --silent --show-error --location "$GAS_EXPORT_URL" -o haiku.json
+          jq -e 'type == "array"' haiku.json > /dev/null
+      - name: Commit only when changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add haiku.json
+          git diff --cached --quiet || git commit -m "chore: sync approved haiku"
+          git push
