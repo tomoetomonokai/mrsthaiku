@@ -6,7 +6,7 @@ const closeDialogButtons = document.querySelectorAll('[data-close-dialog]');
 const form = document.getElementById('haiku-form');
 const formStatus = document.getElementById('form-status');
 
-const GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxgbrgunXf6wOYi9YFyD96uw1x5wqP2I9njNlzdvjQdNFx6mfD8F69eNbRghCl_XjdK/exec';
+const GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbx_0f17SqAvoXpDwEjCUmmvfNuIya84YMulZ5P6a1lECNe7neEt_T-0E2P15DAFIbQz/exec';
 const NEW_DAYS = 7;
 const scrollAmount = 320;
 
