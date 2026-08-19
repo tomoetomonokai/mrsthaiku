@@ -1,0 +1,157 @@
+const container = document.getElementById('haiku-container');
+const wrapper = document.getElementById('scroll-wrapper');
+const dialog = document.getElementById('submission-dialog');
+const openFormButton = document.getElementById('open-form');
+const closeDialogButtons = document.querySelectorAll('[data-close-dialog]');
+const form = document.getElementById('haiku-form');
+const formStatus = document.getElementById('form-status');
+
+const GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxgbrgunXf6wOYi9YFyD96uw1x5wqP2I9njNlzdvjQdNFx6mfD8F69eNbRghCl_XjdK/exec';
+const NEW_DAYS = 7;
+const scrollAmount = 320;
+
+function formatPublishedDate(isoString) {
+  if (!isoString) return '';
+  const date = new Date(isoString);
+  if (Number.isNaN(date.getTime())) return '';
+
+  return new Intl.DateTimeFormat('ja-JP', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  }).format(date);
+}
+
+function isNewHaiku(publishedAt) {
+  if (!publishedAt) return false;
+  const publishedDate = new Date(publishedAt);
+  if (Number.isNaN(publishedDate.getTime())) return false;
+
+  const diff = Date.now() - publishedDate.getTime();
+  const dayMs = 1000 * 60 * 60 * 24;
+  return diff >= 0 && diff <= NEW_DAYS * dayMs;
+}
+
+function createHaikuCard(item) {
+  const card = document.createElement('article');
+  card.className = 'haiku-card';
+
+  if (isNewHaiku(item.publishedAt)) {
+    card.classList.add('is-new');
+
+    const badge = document.createElement('span');
+    badge.className = 'haiku-badge';
+    badge.textContent = '新着';
+    card.appendChild(badge);
+  }
+
+  const textDiv = document.createElement('div');
+  textDiv.className = 'haiku-text';
+  textDiv.textContent = (item.text || '').replaceAll('/', '\n');
+
+  const authorDiv = document.createElement('div');
+  authorDiv.className = 'haiku-author';
+  authorDiv.textContent = item.author || '詠み人知らず';
+
+  const dateDiv = document.createElement('div');
+  dateDiv.className = 'haiku-date';
+  dateDiv.textContent = formatPublishedDate(item.publishedAt);
+
+  card.append(textDiv, authorDiv, dateDiv);
+  container.appendChild(card);
+}
+
+function renderHaikuList(items) {
+  container.innerHTML = '';
+
+  items
+    .filter(item => item && item.text && item.publishedAt)
+    .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
+    .forEach(createHaikuCard);
+}
+
+async function loadHaiku() {
+  try {
+    const response = await fetch('haiku.json', { cache: 'no-store' });
+    if (!response.ok) throw new Error('作品データの取得に失敗しました。');
+
+    const items = await response.json();
+    renderHaikuList(Array.isArray(items) ? items : []);
+  } catch (error) {
+    console.error(error);
+    container.innerHTML = '<p class="error">俳句を読み込めませんでした。</p>';
+  }
+}
+
+function openDialog() {
+  dialog.hidden = false;
+  document.body.style.overflow = 'hidden';
+  form.dataset.startedAt = String(Date.now());
+}
+
+function closeDialog() {
+  dialog.hidden = true;
+  document.body.style.overflow = '';
+}
+
+async function submitHaiku(event) {
+  event.preventDefault();
+  const formData = new FormData(form);
+  const payload = {
+    line1: formData.get('line1')?.trim() || '',
+    line2: formData.get('line2')?.trim() || '',
+    line3: formData.get('line3')?.trim() || '',
+    author: formData.get('author')?.trim() || '詠み人知らず',
+    xHandle: formData.get('xHandle')?.trim() || '',
+    note: formData.get('note')?.trim() || '',
+    website: formData.get('website')?.trim() || '',
+    turnstileToken: formData.get('cf-turnstile-response') || '',
+    formStartedAt: form.dataset.startedAt || ''
+  };
+  if (!payload.line1 || !payload.line2 || !payload.line3) {
+    formStatus.textContent = '上五・中七・下五をすべて入力してください。';
+    return;
+  }
+  if (!payload.turnstileToken) {
+    formStatus.textContent = '人間であることの確認を完了してください。';
+    return;
+  }
+
+  formStatus.textContent = '投稿を送信しています…';
+  try {
+    const response = await fetch(GAS_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+    const result = await response.json();
+    if (!response.ok || result.ok !== true) throw new Error(result.message || '投稿に失敗しました。');
+    form.reset();
+    formStatus.textContent = '受け付けました。管理者確認後に掲載を検討します。';
+    if (window.turnstile) turnstile.reset();
+  } catch (error) {
+    console.error(error);
+    formStatus.textContent = error.message || '送信できませんでした。時間をおいて再度お試しください。';
+    if (window.turnstile) turnstile.reset();
+  }
+}
+
+openFormButton.addEventListener('click', openDialog);
+closeDialogButtons.forEach(button => button.addEventListener('click', closeDialog));
+dialog.addEventListener('click', event => {
+  if (event.target === dialog) closeDialog();
+});
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && !dialog.hidden) closeDialog();
+});
+form.addEventListener('submit', submitHaiku);
+
+document.getElementById('scroll-left').addEventListener('click', () => {
+  wrapper.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+});
+
+document.getElementById('scroll-right').addEventListener('click', () => {
+  wrapper.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+});
+
+loadHaiku();

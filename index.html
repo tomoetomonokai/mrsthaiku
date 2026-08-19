@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>みんなの俳諧集 - 五七の調べ -</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#haiku-container">作品一覧へ移動</a>
+
+  <header>
+    <div class="site-brand">
+      <h1>みんなの俳諧集<span>− 五七の調べ −</span></h1>
+      <p class="site-copy">投稿作品は管理者による確認ののち掲載されます。</p>
+    </div>
+
+    <div class="header-actions">
+      <button id="open-form" type="button" class="post-button" aria-haspopup="dialog" aria-controls="submission-dialog">
+        一句を納める
+      </button>
+    </div>
+  </header>
+
+  <div id="scroll-wrapper">
+    <main id="haiku-container" aria-live="polite"></main>
+
+    <footer>
+      <small>&copy; 二〇二六 みんなの俳諧集運営委員会</small>
+    </footer>
+  </div>
+
+  <div id="scroll-controls" aria-label="スクロール操作">
+    <button id="scroll-left" type="button" aria-label="左へ">◀</button>
+    <button id="scroll-right" type="button" aria-label="右へ">▶</button>
+  </div>
+
+  <div id="submission-dialog" class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title" hidden>
+    <div class="dialog-backdrop" data-close-dialog></div>
+    <section class="dialog-panel">
+      <button class="dialog-close" type="button" aria-label="閉じる" data-close-dialog>×</button>
+      <p class="dialog-kicker">投句</p>
+      <h2 id="dialog-title">一句を納める</h2>
+      <p class="dialog-copy">投稿内容は公開前に管理者が確認します。掲載まで時間がかかる場合があります。</p>
+
+      <form id="haiku-form" class="haiku-form">
+        <div class="field-grid">
+          <label class="field">
+            <span>上五</span>
+            <input type="text" name="line1" maxlength="20" required placeholder="古池や" />
+          </label>
+          <label class="field">
+            <span>中七</span>
+            <input type="text" name="line2" maxlength="28" required placeholder="蛙飛び込む" />
+          </label>
+          <label class="field">
+            <span>下五</span>
+            <input type="text" name="line3" maxlength="20" required placeholder="水の音" />
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Xアカウント名（任意・非公開）</span>
+          <input type="text" name="xHandle" maxlength="15" inputmode="text"
+                autocomplete="off" placeholder="@yourname" pattern="@?[A-Za-z0-9_]{1,15}">
+        </label>
+
+        <label class="field">
+          <span>連絡先（任意）</span>
+          <input type="email" name="contact" maxlength="120" placeholder="yourname@example.com" />
+        </label>
+
+        <label class="field">
+          <span>ひとこと（任意）</span>
+          <textarea name="note" rows="4" maxlength="300" placeholder="季節や背景など"></textarea>
+        </label>
+
+        <div class="form-note">
+          <p>投稿作品は未審査のまま公開されません。不適切な表現、既存作品の転載、その他運営方針に反する内容は掲載しない場合があります。</p>
+        </div>
+
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAEVILztBZtws1Dni" data-theme="light"></div>
+        <label class="hp-field" aria-hidden="true">
+          Webサイト
+          <input type="text" name="website" tabindex="-1" autocomplete="off">
+        </label>
+
+        <div class="form-actions">
+          <button type="submit" class="submit-button">審査に送る</button>
+          <p id="form-status" class="form-status" aria-live="polite"></p>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
