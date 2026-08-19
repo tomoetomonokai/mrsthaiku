@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>みんなの俳諧集 - 五七の調べ -</title>
+  <title>メルスト俳諧集 - 五七五と鈴のしらべ -</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
 
   <header>
     <div class="site-brand">
-      <h1>みんなの俳諧集<span>− 五七の調べ −</span></h1>
+      <h1>メルスト俳諧集<span>− 五七五と鈴のしらべ −</span></h1>
       <p class="site-copy">投稿作品は管理者による確認ののち掲載されます。</p>
     </div>
 
@@ -30,7 +30,7 @@
     <main id="haiku-container" aria-live="polite"></main>
 
     <footer>
-      <small>&copy; 二〇二六 みんなの俳諧集運営委員会</small>
+      <small>&copy; 二〇二六 メルスト俳諧集運営委員会<br />当サイトは、Happy Elements株式会社「メルクストーリア – 癒術士と鈴のしらべ -」をテーマとした<em>非公式ファンサイト</em>です。本サイト内で使用している投稿データ、各種素材等の無断転載・再配布等を固く禁じます。</small>
     </footer>
   </div>
 
@@ -50,15 +50,15 @@
       <form id="haiku-form" class="haiku-form">
         <div class="field-grid">
           <label class="field">
-            <span>上五</span>
+            <span>上の句</span>
             <input type="text" name="line1" maxlength="20" required placeholder="古池や" />
           </label>
           <label class="field">
-            <span>中七</span>
+            <span>中の句</span>
             <input type="text" name="line2" maxlength="28" required placeholder="蛙飛び込む" />
           </label>
           <label class="field">
-            <span>下五</span>
+            <span>下の句</span>
             <input type="text" name="line3" maxlength="20" required placeholder="水の音" />
           </label>
         </div>
@@ -70,17 +70,12 @@
         </label>
 
         <label class="field">
-          <span>連絡先（任意）</span>
-          <input type="email" name="contact" maxlength="120" placeholder="yourname@example.com" />
-        </label>
-
-        <label class="field">
           <span>ひとこと（任意）</span>
           <textarea name="note" rows="4" maxlength="300" placeholder="季節や背景など"></textarea>
         </label>
 
         <div class="form-note">
-          <p>投稿作品は未審査のまま公開されません。不適切な表現、既存作品の転載、その他運営方針に反する内容は掲載しない場合があります。</p>
+          <p>投稿作品は審査後公開されます。不適切な表現、既存作品の転載、その他運営方針に反する内容は掲載しない場合があります。</p>
         </div>
 
         <div class="cf-turnstile" data-sitekey="0x4AAAAAAEVILztBZtws1Dni" data-theme="light"></div>
@@ -90,7 +85,7 @@
         </label>
 
         <div class="form-actions">
-          <button type="submit" class="submit-button">審査に送る</button>
+          <button type="submit" class="submit-button">投稿する</button>
           <p id="form-status" class="form-status" aria-live="polite"></p>
         </div>
       </form>
