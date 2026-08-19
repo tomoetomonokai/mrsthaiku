@@ -9,7 +9,7 @@
   --accent-soft: rgba(159, 74, 63, 0.08);
   --new-color: #8f3027;
   --header-width: 188px;
-  --footer-width: 60px;
+  --footer-width: 100px;
   --shadow-soft: 0 12px 28px rgba(43, 39, 34, 0.08);
   --radius-lg: 20px;
   --radius-md: 14px;
@@ -220,7 +220,6 @@ footer {
 #scroll-controls #scroll-right {
   position: fixed;
   bottom: 24px;
-  display: flex;
   z-index: 40;
 }
 #scroll-controls #scroll-left { left: calc(var(--footer-width) + 22px); }
