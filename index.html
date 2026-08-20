@@ -19,6 +19,9 @@
     </div>
 
     <div class="header-actions">
+      <button id="open-guidelines" type="button" class="guidelines-button" aria-haspopup="dialog" aria-controls="guidelines-dialog">
+        募集要項
+      </button>
       <button id="open-form" type="button" class="post-button" aria-haspopup="dialog" aria-controls="submission-dialog">
         一句を納める
       </button>
@@ -98,7 +101,28 @@
       </form>
     </section>
   </div>
-
+  
+  <div id="guidelines-dialog" class="dialog" role="dialog" aria-modal="true" aria-labelledby="guidelines-title" hidden>
+    <div class="dialog-backdrop" data-close-dialog></div>
+  
+    <section class="dialog-panel guidelines-panel">
+      <button class="dialog-close" type="button" aria-label="募集要項を閉じる" data-close-dialog>
+        ×
+      </button>
+  
+      <p class="dialog-kicker">GUIDELINES</p>
+      <h2 id="guidelines-title">募集要項</h2>
+  
+      <img src="guidelines.png" class="guidelines-image" alt="本企画の募集要項">
+  
+      <p class="guidelines-open-link">
+        <a href="guidelines.png" target="_blank" rel="noopener noreferrer">
+          画像を別タブで開く
+        </a>
+      </p>
+    </section>
+  </div>
+  
   <script src="script.js" defer></script>
 </body>
 </html>
