@@ -2,6 +2,8 @@ const container = document.getElementById('haiku-container');
 const wrapper = document.getElementById('scroll-wrapper');
 const dialog = document.getElementById('submission-dialog');
 const openFormButton = document.getElementById('open-form');
+const guidelinesDialog = document.getElementById('guidelines-dialog');
+const openGuidelinesButton = document.getElementById('open-guidelines');
 const closeDialogButtons = document.querySelectorAll('[data-close-dialog]');
 const form = document.getElementById('haiku-form');
 const formStatus = document.getElementById('form-status');
@@ -83,15 +85,40 @@ async function loadHaiku() {
   }
 }
 
-function openDialog() {
-  dialog.hidden = false;
+let lastFocusedElement = null;
+
+function openModal(targetDialog) {
+  lastFocusedElement = document.activeElement;
+  targetDialog.hidden = false;
   document.body.style.overflow = 'hidden';
-  form.dataset.startedAt = String(Date.now());
+
+  const closeButton = targetDialog.querySelector('.dialog-close');
+  closeButton?.focus();
+}
+
+function closeModal(targetDialog) {
+  targetDialog.hidden = true;
+
+  const anyDialogOpen = [...document.querySelectorAll('.dialog')]
+    .some(item => !item.hidden);
+
+  if (!anyDialogOpen) {
+    document.body.style.overflow = '';
+  }
+
+  lastFocusedElement?.focus();
+}
+
+function openDialog() {
+  openModal(dialog);
 }
 
 function closeDialog() {
-  dialog.hidden = true;
-  document.body.style.overflow = '';
+  closeModal(dialog);
+}
+
+function openGuidelines() {
+  openModal(guidelinesDialog);
 }
 
 async function submitHaiku(event) {
@@ -137,13 +164,22 @@ async function submitHaiku(event) {
 }
 
 openFormButton.addEventListener('click', openDialog);
-closeDialogButtons.forEach(button => button.addEventListener('click', closeDialog));
-dialog.addEventListener('click', event => {
-  if (event.target === dialog) closeDialog();
+openGuidelinesButton.addEventListener('click', openGuidelines);
+
+document.querySelectorAll('[data-close-dialog]').forEach(button => {
+  button.addEventListener('click', () => {
+    const targetDialog = button.closest('.dialog');
+    if (targetDialog) closeModal(targetDialog);
+  });
 });
+
 document.addEventListener('keydown', event => {
-  if (event.key === 'Escape' && !dialog.hidden) closeDialog();
+  if (event.key !== 'Escape') return;
+  const openedDialog = [...document.querySelectorAll('.dialog')]
+    .find(item => !item.hidden);
+  if (openedDialog) closeModal(openedDialog);
 });
+
 form.addEventListener('submit', submitHaiku);
 
 document.getElementById('scroll-left').addEventListener('click', () => {
