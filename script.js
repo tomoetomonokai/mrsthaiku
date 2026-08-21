@@ -217,10 +217,10 @@ wrapper.addEventListener('wheel', event => {
   const multiplier =
     event.deltaMode === WheelEvent.DOM_DELTA_LINE ? 16 :
     event.deltaMode === WheelEvent.DOM_DELTA_PAGE ? wrapper.clientWidth :
-    0.5;
+    1;
 
   wrapper.scrollBy({
-    left: -event.deltaY * multiplier,
+    left: -event.deltaY * multiplier * 0.5,
     behavior: 'auto'
   });
 }, { passive: false });
