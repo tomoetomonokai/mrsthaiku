@@ -220,7 +220,7 @@ wrapper.addEventListener('wheel', event => {
     1;
 
   wrapper.scrollBy({
-    left: -event.deltaY * multiplier * 0.5,
+    left: -event.deltaY * multiplier,
     behavior: 'auto'
   });
 }, { passive: false });
