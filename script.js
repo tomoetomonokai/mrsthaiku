@@ -9,7 +9,7 @@ const form = document.getElementById('haiku-form');
 const formStatus = document.getElementById('form-status');
 
 const GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbx_0f17SqAvoXpDwEjCUmmvfNuIya84YMulZ5P6a1lECNe7neEt_T-0E2P15DAFIbQz/exec';
-const NEW_DAYS = 7;
+const NEW_DAYS = 1;
 const scrollAmount = 320;
 
 function formatPublishedDate(isoString) {
@@ -188,6 +188,62 @@ document.getElementById('scroll-left').addEventListener('click', () => {
 
 document.getElementById('scroll-right').addEventListener('click', () => {
   wrapper.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+});
+
+function isDesktopLayout() {
+  return window.matchMedia('(min-width: 821px)').matches;
+}
+
+function isDialogOpen() {
+  return [...document.querySelectorAll('.dialog')]
+    .some(item => !item.hidden);
+}
+
+function isTextInputTarget(target) {
+  return target instanceof HTMLElement && (
+    target.matches('input, textarea, select') ||
+    target.isContentEditable
+  );
+}
+
+wrapper.addEventListener('wheel', event => {
+  if (!isDesktopLayout() || isDialogOpen()) return;
+
+  const verticalWheel = Math.abs(event.deltaY) >= Math.abs(event.deltaX);
+  if (!verticalWheel || event.deltaY === 0) return;
+
+  event.preventDefault();
+
+  const multiplier =
+    event.deltaMode === WheelEvent.DOM_DELTA_LINE ? 16 :
+    event.deltaMode === WheelEvent.DOM_DELTA_PAGE ? wrapper.clientWidth :
+    1;
+
+  wrapper.scrollBy({
+    left: event.deltaY * multiplier,
+    behavior: 'auto'
+  });
+}, { passive: false });
+
+document.addEventListener('keydown', event => {
+  if (!isDesktopLayout() || isDialogOpen()) return;
+  if (isTextInputTarget(event.target)) return;
+
+  if (event.key === 'ArrowLeft') {
+    event.preventDefault();
+    wrapper.scrollBy({
+      left: -scrollAmount,
+      behavior: 'smooth'
+    });
+  }
+
+  if (event.key === 'ArrowRight') {
+    event.preventDefault();
+    wrapper.scrollBy({
+      left: scrollAmount,
+      behavior: 'smooth'
+    });
+  }
 });
 
 loadHaiku();
