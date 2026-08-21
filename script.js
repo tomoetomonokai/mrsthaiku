@@ -10,7 +10,7 @@ const formStatus = document.getElementById('form-status');
 
 const GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbx_0f17SqAvoXpDwEjCUmmvfNuIya84YMulZ5P6a1lECNe7neEt_T-0E2P15DAFIbQz/exec';
 const NEW_DAYS = 1;
-const scrollAmount = 320;
+const scrollAmount = 160;
 
 function formatPublishedDate(isoString) {
   if (!isoString) return '';
@@ -220,7 +220,7 @@ wrapper.addEventListener('wheel', event => {
     1;
 
   wrapper.scrollBy({
-    left: event.deltaY * multiplier,
+    left: -event.deltaY * multiplier,
     behavior: 'auto'
   });
 }, { passive: false });
