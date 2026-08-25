@@ -439,7 +439,7 @@ footer {
   #scroll-controls { display: none; }
   .field-grid { grid-template-columns: 1fr; }
   .dialog-panel {
-    margin: 1rem auto;
+    margin: 1rem auto 3rem;
     padding: 1.25rem;
   }
 }
